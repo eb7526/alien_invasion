@@ -34,6 +34,7 @@ class AlienInvasion:
             self._update_screen()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
 
 
 
@@ -83,6 +84,11 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+    def _update_aliens(self):
+        """Check if the fleet is at the edge, then drop the aliens and reverse direction"""
+        self._check_fleet_edges()
+        self.aliens.update()
+
     def _create_fleet(self):
         """Create the fleet of aliens"""
         # Create an alien and find the number of aliens in a row
@@ -112,6 +118,19 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
+
+    def _check_fleet_edges(self):
+        """Respond approprietly if any aliens have reached the edge"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Change direction of aliens and drop fleet down the screen."""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
 
     def _update_screen(self):
