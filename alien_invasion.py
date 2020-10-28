@@ -74,14 +74,16 @@ class AlienInvasion:
             self.stats.game_active = True
             self.sb.prep_score()
             self.sb.prep_level()
+            self.sb.prep_ships()
 
-            # Get rid of any remainig aliens and bullets
+            # Get rid of any remaining aliens and bullets
             self.aliens.empty()
             self.bullets.empty()
 
             # Create a new fleet and centre the ship
             self._create_fleet()
             self.ship.centre_ship()
+            
 
             # Hide the mouse cursor
             pygame.mouse.set_visible(False)
@@ -148,8 +150,9 @@ class AlienInvasion:
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
         if self.stats.ships_left > 0:
-            # Decrement ships_left.
+            # Decrement ships_left and update scoreboard.
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
             
             # Get rid of any remaining aliens and bullets.
             self.aliens.empty()
@@ -203,7 +206,7 @@ class AlienInvasion:
         # Determine the number of rows of aliens that fit on the screen
         ship_height = self.ship.rect.height
         available_space_y = (self.settings.screen_height - 
-                                (3 * alien_height) - ship_height)
+                                (15 * alien_height) - ship_height)
         number_rows = available_space_y // (2 * alien_height)
         
         # Create the full fleet of aliens
