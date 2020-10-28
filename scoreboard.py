@@ -1,4 +1,6 @@
 import pygame.font
+import json
+
 from pygame.sprite import Group
 
 from ship import Ship
@@ -18,6 +20,22 @@ class Scoreboard:
         self.text_color = (30, 30, 30)
         self.font = pygame.font.SysFont(None, 48)
 
+        self.prep_images()
+
+    def retrieve_high_score(self):
+        try:  
+            with open('high_score.json', 'r') as f:
+                self.badger = json.load(f)
+        except FileNotFoundError:
+            self.badger = 0
+
+    def save_high_score(self):
+        with open('high_score.json', 'w') as f:
+            json.dump(self.stats.high_score, f)
+    
+
+
+    def prep_images(self):
         # Prepare the initial score images.
         self.prep_score()
         self.prep_high_score()

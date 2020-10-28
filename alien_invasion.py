@@ -3,6 +3,7 @@ from time import sleep
 
 import pygame
 
+
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
@@ -25,8 +26,9 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         # Create an instance to display scoreboard and store game statitics."""
+        
         self.stats = GameStats(self)
-        self.sb = Scoreboard(self)
+        self.sb = Scoreboard(self)      
         
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -36,6 +38,9 @@ class AlienInvasion:
 
         # Make the play button.
         self.play_button = Button(self, "Play")
+        
+        # Initialise the previosu high score
+        self.sb.retrieve_high_score()
 
 
     def run_game(self):
@@ -47,6 +52,7 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
+
 
             self._update_screen()
 
@@ -139,13 +145,17 @@ class AlienInvasion:
             self.sb.check_high_score()
 
         if not self.aliens:
-            # Destroy existing bullets and create new fleet.
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
-            # Increase level
-            self.stats.level += 1
-            self.sb.prep_level()
+            self._set_new_level()
+            
+
+    def _set_new_level(self):
+        # Destroy existing bullets and create new fleet.
+        self.bullets.empty()
+        self._create_fleet()
+        self.settings.increase_speed()
+        # Increase level
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
@@ -166,6 +176,8 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            self.sb.save_high_score()
+            print(self.sb.badger)
             pygame.mouse.set_visible(True)
        
 
