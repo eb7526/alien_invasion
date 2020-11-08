@@ -22,12 +22,7 @@ class Scoreboard:
 
         self.prep_images()
 
-    def retrieve_high_score(self):
-        try:  
-            with open('high_score.json', 'r') as f:
-                self.badger = json.load(f)
-        except FileNotFoundError:
-            self.badger = 0
+
 
     def save_high_score(self):
         with open('high_score.json', 'w') as f:

@@ -39,8 +39,8 @@ class AlienInvasion:
         # Make the play button.
         self.play_button = Button(self, "Play")
         
-        # Initialise the previosu high score
-        self.sb.retrieve_high_score()
+        # Initialise the previous high score
+        self.stats.retrieve_high_score()
 
 
     def run_game(self):
